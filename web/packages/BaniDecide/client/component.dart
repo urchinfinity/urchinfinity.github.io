@@ -140,7 +140,7 @@ class QuestionOutput {
   }
   
   bool get _isLoggedin
-    => js.context.callMethod('getLoginState').toString() == '1';
+    => js.context.callMethod('getLoginState').toString() != '3';
 }
 
 
