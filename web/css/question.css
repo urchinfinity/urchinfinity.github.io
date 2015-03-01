@@ -27,7 +27,7 @@
   display: inline;
 }
 
-.count, #buttons {
+.count {
   float: right;
 }
 
@@ -35,7 +35,12 @@
   margin-top: 2%;
 }
 
+#buttons {
+  height: 70px;
+}
+
 #buttons button {
+  float: right;
   padding: 0px;
   border: 0px;
   margin-left: 10px;
