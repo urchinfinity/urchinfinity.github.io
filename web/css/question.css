@@ -1,4 +1,4 @@
-#question_wrapper, #option_wrapper {
+#question_wrapper, #option_wrapper, #fb-comment-container {
   width: 50%;
   margin-left: auto;
   margin-right: auto;
@@ -27,7 +27,16 @@
   display: inline;
 }
 
-
-.count {
+.count, #buttons {
   float: right;
+}
+
+#fb-comment-container {
+  margin-top: 2%;
+}
+
+#buttons button{
+  padding: 0px;
+  border: 0px;
+  margin-left: 10px;
 }
