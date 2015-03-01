@@ -1916,12 +1916,14 @@ ru:function(){this.rv().ml(new M.By(this)).OA(new M.lv())},
 DM:function(){var z=H.qI(H.VM(new P.Zf(H.qI(H.VM(new P.vs(0,$.X3,null),[null]),"$isvs",[null],"$asvs")),[null]),"$isoh",[null],"$asoh")
 $.LX().V7("getQuestion",[this.ez,new M.vb(z),new M.Xn(z)])
 return z.MM},
-rv:function(){var z,y
+rv:function(){var z,y,x
 z=H.qI(H.VM(new P.Zf(H.qI(H.VM(new P.vs(0,$.X3,null),[null]),"$isvs",[null],"$asvs")),[null]),"$isoh",[null],"$asoh")
 y=$.LX()
 if(J.AG(y.nQ("getLoginState"))==="3"){P.JS("Please login first!")
-y.nQ("fb_login")}else y.V7("selectItem",[this.Sl,this.ez,this.gnZ(),new M.aM(z),new M.aG(z)])
-return z.MM},
+y.nQ("fb_login")}else{x=J.AG(y.t(0,"uid"))
+this.Sl=x
+P.JS("uid: "+H.d(x))
+y.V7("selectItem",[this.Sl,this.ez,this.gnZ(),new M.aM(z),new M.aG(z)])}return z.MM},
 gnZ:function(){for(var z=0;z<4;++z)if(H.Yg(J.K0(J.UQ(this.ya,z))))return z
 return-1},
 wC:function(a){this.m9=H.lD(C.BZ.Wk(document,"#question_wrapper .content"),"$isCp")

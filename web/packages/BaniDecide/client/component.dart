@@ -124,6 +124,8 @@ class QuestionOutput {
       print("Please login first!");
       js.context.callMethod('fb_login');
     } else {
+      uid = js.context['uid'].toString();
+      print('uid: $uid');
       var ok = (response) => cmpl.complete(response);
       var fail = (error) => cmpl.completeError(error);
       js.context.callMethod('selectItem', [uid, qid, _selectedOption, ok, fail]);
