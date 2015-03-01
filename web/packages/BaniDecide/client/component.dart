@@ -122,7 +122,7 @@ class QuestionOutput {
 
     if (!_isLoggedin) {
       print("Please login first!");
-      //TODO: jump out fb login page
+      js.context.callMethod('fb_login');
     } else {
       var ok = (response) => cmpl.complete(response);
       var fail = (error) => cmpl.completeError(error);
@@ -140,7 +140,7 @@ class QuestionOutput {
   }
   
   bool get _isLoggedin
-    => js.context.callMethod('getloginstatus');
+    => js.context.callMethod('getLoginState').toString() == '1';
 }
 
 
