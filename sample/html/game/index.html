@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+  	<meta charset="utf-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../styles/bootstrap/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../styles/main_style.css">
+    <link rel="stylesheet" href="../../font-awesome-4.3.0/css/font-awesome.min.css">
+    <script src="../../js/jquery-1.11.2.min.js"></script>
+    <script src="../../js/bootstrap/bootstrap.js"></script>
+    <title>Stupid Bird Express</title>
+    <link rel="shortcut icon" href="../../source/logo2.png"/>
+  </head>
+ 
+  <body>   
+    <div class="page-header" style="margin-bottom:2%;">
+      <h1><img src="../../source/head.png" height="100" width="100">笨鳥快遞<small class="en-title">Stupid Bird Express</small><i class="fa fa-info-circle" id="show-alert"></i>
+      </h1>
+      <div class="alert alert-info alert-dismissible my-alert hidden" role="alert">
+        <strong>Info! </strong>我們遊戲的靈感來源為<a href="http://www.playcodemonkey.com/" class="alert-link">codemonkey</a>，喜歡我們的遊戲的話也去試試吧！
+      </div>
+    </div>
+    <div class = "inner-page padd game-page">
+      <div class = "about-vedio padd">
+        <div class = "container-fluid" style="width:90%">
+          <div class="row">
+            <div class="panel panel-default col-md-2 code-list code-sample">
+              <div class="panel-heading">Sample Code</div>
+              <div class="panel-body"> 
+                <ul class="list-group">
+                    <fieldset disabled>
+                    <li class="list-group-item category">Stupid Bird's action</li>
+                    <li class="list-group-item b-action b-walk">
+                      <span class="move-tag"><i class="fa fa-bars"></i></span>stupidBird.walk
+                      <input type="text" name="stepnum" class="parameter-input text-input">
+                      <i class="fa fa-times del-icon hidden"></i>
+                    </li>
+                    <li class="list-group-item b-action b-turn">
+                      <span class="move-tag"><i class="fa fa-bars"></i></span>stubirBird.turn
+                      <select class="form-control parameter-input select-input">
+                        <option>45&#176</option>
+                        <option>90&#176</option>
+                        <option>135&#176</option>
+                        <option>180&#176</option>
+                        <option>225&#176</option>
+                      </select>
+                      <i class="fa fa-times del-icon hidden"></i>
+                    </li>
+                    <li class="list-group-item b-action b-fly">
+                      <span class="move-tag"><i class="fa fa-bars"></i></span>stubirBird.fly
+                      <i class="fa fa-times del-icon hidden"></i>
+                    </li>
+                    <li class="list-group-item b-action b-paddle">
+                      <span class="move-tag"><i class="fa fa-bars"></i></span>stubirBird.paddle
+                      <input type="text" name="stepnum" class="parameter-input text-input">
+                      <i class="fa fa-times del-icon hidden"></i>
+                    </li>
+                    <li class="list-group-item b-action b-hatch">
+                      <span class="move-tag"><i class="fa fa-bars"></i></span>stubirBird.hatch
+                      <i class="fa fa-times del-icon hidden"></i>
+                    </li>
+                  </fieldest>
+                </ul>
+              </div>
+            </div>
+            <div class="panel panel-default col-md-2 code-list your-code">
+              <div class="panel-heading">Your Code</div>
+              <div class="panel-body"> 
+                <ul class="list-group">
+                </ul>
+              </div>
+            </div>
+
+            
+            <div class="panel panel-default col-md-7 game-panel">
+              <div class="panel-body"> 
+                <div class="game-canvas"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer style="margin-top:0;">copyright &copy 2015HackNTU</footer>
+    <!-- show alert -->
+    <script>
+      $("#show-alert").click(function() {
+        $(".alert").toggleClass("hidden");
+      });
+    </script>
+    <!-- dart file -->
+    <script type="application/dart" src="../../dart/game.dart"></script>
+    <script src="packages/browser/dart.js"></script>
+  </body>
+</html>
