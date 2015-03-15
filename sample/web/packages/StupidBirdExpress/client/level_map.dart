@@ -3,9 +3,14 @@ library client.level_map;
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
+import 'dart:js' as js;
+
 import "field_name.dart";
 
 class LevelMap {
+  String id;
+  bool isText;
+  
   List<List<int>> map;
   List<List<DivElement>> mapBlock;
 
@@ -20,6 +25,13 @@ class LevelMap {
   DivElement _boat;
   DivElement _flower;
   DivElement _message;
+  
+  Element _cmplText;
+  DivElement _cmplImg;
+  AudioElement _cmplAudio;
+  VideoElement _cmplVideo;
+  AnchorElement _downloadBtn;
+  
   ButtonElement _completeBtn;
   int _boatLeft;
   int _boatTop;
@@ -27,19 +39,24 @@ class LevelMap {
   bool _isComplete;
   
   List _actorInfo;
-  //int _lastImg;
   
-  List<LIElement> get _children => querySelectorAll('.your-code .list-group .b-action');
-    
+  List<LIElement> get _children => querySelectorAll('.your-code .list-group .b-action');  
   
-  LevelMap(this._actorInfo, this.map, this.isMap2) {
+  LevelMap(this.id, this._actorInfo, this.map, this.isMap2) {
     mainActor = querySelector('.stupid-bird');
     mainActorImgs = querySelectorAll('.game-blocks .stupid-bird img');
+    
     _boat = querySelector('.boat');
     _flower = querySelector('.flower');
     _message = querySelector('.message');
     _completeBtn = querySelector('.complete-btn');
     _isOnBoat = false;
+    
+    _cmplText = querySelector('.cmpl-text');
+    _cmplImg = querySelector('.cmpl-img');
+    _cmplAudio = querySelector('.cmpl-audio');
+    _cmplVideo = querySelector('.cmpl-video');
+    _downloadBtn = querySelector('.download a');
     
     _createBlocks();
     _genImgs();
@@ -204,8 +221,10 @@ class LevelMap {
       if (state == imgs.length * TIME_UNIT_PER_POS - 1) {
         _removeRunningStatus(_children[highlight[posState]]);
         timer.cancel();
-        if (_isComplete)
+        if (_isComplete) {
           _completeBtn.click();
+          _renderCompletePage();
+        }
       }
       state++;
       _isComplete = false;
@@ -231,33 +250,35 @@ class LevelMap {
         mapBlock[i][j]
           ..style.left = '${j * STEP_UNIT}px'
           ..style.top = '${i * STEP_UNIT}px'
-//          ..style.boxSizing = 'border-box'
-//          ..style.border = '1px solid black'
+          ..style.boxSizing = 'border-box'
+          ..style.borderTop = '1px solid #eee'
+          ..style.borderLeft = '1px solid #eee'
           ..classes.add('block');
                
        gameBlocks.children.insert(0, mapBlock[i][j]);
       }
-    }
-    
+    } 
   }
   
   void _genImgs() {
     for (int i = 0; i < MAP_HEIGHT; i++) {
       for (int j = 0; j < MAP_WIDTH; j++) {
         if (map[i][j] <= MAP_ITEMS_COUNT) {
-          ImageElement img = new ImageElement();
-          img.src = map[i][j] != MAP_UNFLIPPED_TREE ? BlockImgs[map[i][j]] 
-                                                    : BlockImgs[map[i][j] + new Random().nextInt(4)];
-          img.style..width = '45px'
-                   ..height = '45px';
-          
-          mapBlock[i][j].children.insert(0, img);
-          
-          if (map[i][j] == MAP_FLIPPED_ARBOR_3) {
+          if (map[i][j] != MAP_EGG) {
+            ImageElement img = new ImageElement();
+            img.src = map[i][j] != MAP_UNFLIPPED_TREE ? BlockImgs[map[i][j]] 
+                                                      : BlockImgs[map[i][j] + new Random().nextInt(4)];
+            img.style..width = '45px'
+                     ..height = '45px';
+            
+            mapBlock[i][j].children.insert(0, img);
+          }
+          if (map[i][j] == MAP_EGG || map[i][j] == MAP_FLIPPED_ARBOR_3) {
             ImageElement img = new ImageElement();
             img.src = BlockImgs[MAP_EGG];
-            img.style..width = '45px'
-                     ..height = '45px'
+            img.style..width = '25px'
+                     ..height = '25px'
+                     ..margin = '10px'
                      ..position = 'absolute';
             
             mapBlock[i][j].children.insert(0, img);
@@ -377,5 +398,66 @@ class LevelMap {
       default:
         return([false]);
     } 
+  }
+  
+  void _renderCompletePage() {
+    _setIdStatus().then((_) {
+      _getMessage().then((response) {
+        print('content: ${response['content']}');
+        
+        if (response['isFile']) {
+          List<String> fileType = response['content'].split('.');
+          String type = fileType[fileType.length - 1].toLowerCase();
+          
+          print(type);
+          
+          if (type == 'jpg' || type == 'jpeg' || type == 'png') {
+            _cmplImg.classes.remove('disappear');
+            ImageElement srcElem = _cmplImg.querySelector('img');
+            srcElem.src = response['content'];
+            _downloadBtn.href = response['content'];
+          } else if (type == 'mp3') {
+            _cmplAudio.classes.remove('disappear');
+            SourceElement srcElem = _cmplAudio.querySelector('source');
+            srcElem.src = response['content'];
+            _downloadBtn.href = response['content'];
+          } else if (type == 'mp4') {
+            _cmplVideo.classes.remove('disappear');
+            SourceElement srcElem = _cmplVideo.querySelector('source');
+            srcElem.src = response['content'];
+            _downloadBtn.href = response['content'];
+          } else {
+            _cmplText.text = 'Unable to display file content. Please download it directly.';
+          } 
+        } else {
+          _cmplText.classes.remove('disappear');
+          _cmplText.text = response['content'];
+        }
+      });
+    })
+    .catchError((ex) {print('error: $ex');});
+  }
+  
+  Future _setIdStatus() {
+    final Completer cmpl = new Completer();
+    
+    var ok = () => cmpl.complete();
+    var fail = (error) => cmpl.completeError(error);
+    
+    print(id);
+    js.context.callMethod('setStatus', [id, true, ok, fail]);
+    
+    return cmpl.future;
+  }
+  
+  Future _getMessage() {
+    final Completer cmpl = new Completer();
+    
+    var ok = (response) => cmpl.complete(response);
+    var fail = (error) => cmpl.completeError(error);
+    
+    js.context.callMethod('downloadMsg', [id, ok, fail]);
+    
+    return cmpl.future;
   }
 }

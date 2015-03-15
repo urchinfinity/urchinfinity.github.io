@@ -1,10 +1,11 @@
-<html><head>
+<html>
+<head>
   <script src="parse-1.3.4.min.js"></script>
   <script src="parse_client.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 </head>
 
-  <body><button onclick="uploadText()">UploadSomeText</button>
+  <button onclick="uploadText()">UploadSomeText</button>
   <button onclick="testDone()">TestIsDone</button>
   <button onclick="setDone()">SetDone</button>
   <button onclick="uploadFile()">UploadFile</button>
@@ -15,7 +16,15 @@
     var msgId;
 
     function uploadText() {
-      uploadMsg(false, "abcabcabc", null, function(objectId) {
+      uploadMsg(
+          "weitang114", 
+          "weitang114@gmail.com", 
+          "heyheyrecv", 
+          "heyrecv@gmail.com", 
+          false, 
+          "abcabcabc", 
+          null, 
+          function(objectId) {
         window.alert("uploaded id = " + objectId);
         msgId = objectId;
       }, function(error) {
@@ -46,7 +55,7 @@
         var name = file.name;
         console.log("filename:" + name);
        
-        uploadMsg(true, file, name, function(objectId) {
+        uploadMsg("weitang114@gmail.com", true, file, name, function(objectId) {
           window.alert("uploaded id = " + objectId);
           msgId = objectId;
         }, function(error) {
@@ -58,12 +67,12 @@
     function download() {
       downloadMsg(msgId, function(msg) {
         console.log("downloaded message:" + JSON.stringify(msg));
-        window.alert(msg.content);
+        window.alert(msg.content + "json:" + JSON.stringify(msg));
       }, function(error) {
         window.alert(error);
       });
     }
   </script>
-
-
-</body></html>
+<body>
+</body>
+</html>

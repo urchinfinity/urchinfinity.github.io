@@ -120,6 +120,7 @@ class _ForeignBaseAggregateTransform {
 // barback versions because merely referencing undefined types in type
 // annotations isn't a static error. Only implementing an undefined interface is
 // a static error.
+//# if barback >=0.14.1
 
 /// A wrapper for an [AggregateTransform] that's in the host isolate.
 ///
@@ -169,3 +170,4 @@ class ForeignDeclaringAggregateTransform
   }
 }
 
+//# end
